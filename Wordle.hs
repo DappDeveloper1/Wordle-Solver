@@ -1,9 +1,8 @@
 module Wordle where
 
-import Data.Text (Text)
 import Data.List as L (map, delete, sort, elemIndices)
 import Data.List.Split as S (splitOn)
-import Debug.Trace (trace, traceShow)
+import Debug.Trace (trace)
 
 --efficiency key
 -- W = length of word list
@@ -241,7 +240,7 @@ wordle = do
         --used to store the best opening word, so you don't have to figure that out each time the code executes
         --can be found using startingWordList 1 word list solutions
         startingWord :: String
-        startingWord = "crane"
+        startingWord = "roate"
 
         --efficiency of O(1)
         --reads the word in the answer.txt file
