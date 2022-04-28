@@ -12,3 +12,5 @@ Solve Game Instructions:
     Yellow: 1
     Green: 2
   Make sure to separate the results with a ", "
+  
+  The starting word "roate" is hard coded into the program, because my method of finding the best word takes quite some time and this process only needs to be done once.
