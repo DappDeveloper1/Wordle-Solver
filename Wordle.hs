@@ -21,7 +21,11 @@ wordle = do
     let answer = head $ lines a
     let words = lines w
     let solutions = lines s
-    if entry == 0 then solve answer words solutions 1 else if entry == 1 then livePlay startingWord words solutions 1 else error "Invalid input"
+    if entry == 0 then 
+        solve answer words solutions 1 
+    else if entry == 1 then 
+        livePlay startingWord words solutions 1 
+    else error "Invalid input"
     where 
         --efficiency of bestWord + delete + updateList, which is O(S^3*L^2*W)
         --recursively uses bestWord to make a guess, then updates the list of possible solutions until the guess is correct
@@ -29,10 +33,14 @@ wordle = do
         solve :: String -> [String] -> [String] -> Int -> IO ()
         solve answer words solutions 1 = do
             putStrLn startingWord
-            if startingWord == answer then putStrLn ("Word guessed in " ++ show 1 ++ " guesses") else solve answer (delete startingWord words) (updateList startingWord answer solutions) 2
+            if startingWord == answer then 
+                putStrLn ("Word guessed in " ++ show 1 ++ " guesses") 
+            else solve answer (delete startingWord words) (updateList startingWord answer solutions) 2
         solve answer words solutions 7 = print "Could not guess the word in time"
         solve answer words solutions round = do
-            let guess = bestWord words solutions in if guess == answer then putStrLn guess <> putStrLn ("Word guessed in " ++ show round ++ " guesses") else trace guess solve answer (delete guess words) (updateList guess answer solutions) $ round + 1
+            let guess = bestWord words solutions in if guess == answer then 
+                putStrLn guess <> putStrLn ("Word guessed in " ++ show round ++ " guesses") 
+            else trace guess solve answer (delete guess words) (updateList guess answer solutions) $ round + 1
 
         --efficiency of convert + delete + correct + eliminate + bestWord, which is O(S^3*L^2*W)
         --recursively receives the grade for its guess, uses eliminate to get the new list of possible solutions, then calls bestWord on the new list to make its next guess
@@ -46,7 +54,9 @@ wordle = do
             rawResults <- getLine
             let results = convert $ splitOn ", " rawResults
             let updatedWords = delete guess words
-            if correct results then putStrLn ("I win in " ++ show 1 ++ " guesses!") else let updatedSolutions = eliminate guess results solutions in livePlay (bestWord updatedWords updatedSolutions) updatedWords updatedSolutions 2
+            if correct results then 
+                putStrLn ("I win in " ++ show 1 ++ " guesses!") 
+            else let updatedSolutions = eliminate guess results solutions in livePlay (bestWord updatedWords updatedSolutions) updatedWords updatedSolutions 2
         livePlay guess words solutions 7 = putStrLn "Could not guess the word in time"
         livePlay guess words solutions round = do
             putStrLn guess
@@ -54,7 +64,9 @@ wordle = do
             rawResults <- getLine
             let results = convert $ splitOn ", " rawResults
             let updatedWords = delete guess words
-            if correct results then putStrLn ("I win in " ++ show round ++ " guesses!") else let updatedSolutions = eliminate guess results solutions in livePlay (bestWord updatedWords updatedSolutions) updatedWords updatedSolutions $ round + 1
+            if correct results then 
+                putStrLn ("I win in " ++ show round ++ " guesses!") 
+            else let updatedSolutions = eliminate guess results solutions in livePlay (bestWord updatedWords updatedSolutions) updatedWords updatedSolutions $ round + 1
 
         --efficiency of O(W * log W ) + tupleList , which effectively is O(S^3*L^2*W)
         --used to get more than just the single bestWord
@@ -86,7 +98,10 @@ wordle = do
         --efficiency of + eliminate grade + correct, which is O(S*L^2)
         --returns the new list of possible solutions after grading the guess against answer
         updateList :: String -> String -> [String] -> [String]
-        updateList guess answer solutions = let results = grade guess guess answer in if correct results then [] else eliminate guess results solutions
+        updateList guess answer solutions = let results = grade guess guess answer in 
+            if correct results then 
+                [] 
+            else eliminate guess results solutions
 
         --efficiency of O(S*L^2)
         --iterates through solutions and uses the keep helper function to determine if it should be included in the updated solutions
@@ -119,7 +134,10 @@ wordle = do
                         --returns true if all the yellow letters find themselves in the answer at a different index
                         yellowCheck :: String -> String -> [Int] -> [Int] -> (Bool, [Int], String)
                         yellowCheck guess word results [] = (True, results, word)
-                        yellowCheck guess word results (i:is) = if guess !! i `elem` word && guess !! i /= word !! i then let replaced = replaceYellow results word i (head (guess !! i `elemIndices` word)) in yellowCheck guess (snd replaced) (fst replaced) is else (False, [], "")
+                        yellowCheck guess word results (i:is) = 
+                            if guess !! i `elem` word && guess !! i /= word !! i then 
+                                let replaced = replaceYellow results word i (head (guess !! i `elemIndices` word)) in yellowCheck guess (snd replaced) (fst replaced) is 
+                            else (False, [], "")
 
                         --returns true if all the nothing letters are not found in the answer
                         nothingCheck :: String -> String -> [Int] -> Bool
