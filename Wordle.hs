@@ -184,6 +184,11 @@ wordle = do
                         2 : grade xs guess answer
                     else 1 : grade xs guess answer
                 else 0 : grade xs guess answer
+            else if answerOccur > myOccur then 
+                if x == (answer !! (4 - length xs)) then 
+                    2 : grade xs guess (replace answer (4 - length xs))
+                else 
+                    1 : grade xs guess (replace answer $ indexOfClaimedLetter x guess answer) 
             else
                 if answerOccur == 0 then
                     0 : grade xs guess answer
